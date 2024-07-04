@@ -122,7 +122,7 @@ class Tapper:
                             )
 
                             cards = combo_cards['combo']
-                            date = combo_cards['date']
+                            expired = combo_cards['expired']
 
                             async with self.tg_client:
                                 available_combo_cards = [
@@ -148,10 +148,9 @@ class Tapper:
                                        )
                                 ]
 
-                            start_bonus_round = datetime.strptime(date, "%d-%m-%y").replace(hour=15)
-                            end_bonus_round = start_bonus_round + timedelta(days=1)
+                            end_bonus_round = datetime.utcfromtimestamp(expired)
 
-                            if start_bonus_round <= datetime.now() < end_bonus_round:
+                            if datetime.now() < end_bonus_round:
                                 common_price = sum([upgrade['price'] for upgrade in available_combo_cards])
                                 need_cards_count = len(cards)
                                 possible_cards_count = len(available_combo_cards)
